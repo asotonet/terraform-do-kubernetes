@@ -1,7 +1,7 @@
 # terraform-do-kubernetes
 infrestructura como codigo para crear un cluster de kubernetes nativo de Digital Ocean.
 
-``# Terraform DO Kubernetes
+# Terraform DO Kubernetes
 
 Este repositorio contiene configuraciones de Terraform para desplegar un clúster de Kubernetes en DigitalOcean. La configuración incluye la creación del clúster, los grupos de nodos, y proporciona una salida `kubeconfig` para gestionar el clúster.
 
