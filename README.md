@@ -57,9 +57,13 @@ Para desplegar el clúster de Kubernetes en DigitalOcean, sigue estos pasos:
     ````bash
     kubectl --kubeconfig=kubeconfig.yaml apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
     ````
-
+    Exponemos el puerto del servicio con un balanceador
     ````bash
     kubectl --kubeconfig=kubeconfig.yaml patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
+    ````
+    Mostramos la contraseña inicial del servicio ArgoCD
+    ````bash
+    kubectl --kubeconfig=kubeconfig.yaml -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
     ````
 ### Destruir el Clúster
 
