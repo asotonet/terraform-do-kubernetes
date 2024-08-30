@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> e20f4925640ccb664becdd2134623b88329e8e31
 
 # Terraform DO Kubernetes
 
@@ -70,7 +73,10 @@ Siéntete libre de bifurcar este repositorio, hacer cambios y enviar solicitudes
 ### Licencia
 
 Este proyecto está licenciado bajo la Licencia MIT. Consulta el archivo LICENSE para más detalles.
+<<<<<<< HEAD
 =======
 # terraform-do-kubernetes
 infrestructura como codigo para crear un cluster de kubernetes nativo de Digital Ocean.
 >>>>>>> parent of 34f8eb8 (despliegue de cluster exitoso)
+=======
+>>>>>>> e20f4925640ccb664becdd2134623b88329e8e31
