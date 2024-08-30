@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> e20f4925640ccb664becdd2134623b88329e8e31
 
 # Terraform DO Kubernetes
 
@@ -53,8 +49,18 @@ Para desplegar el clúster de Kubernetes en DigitalOcean, sigue estos pasos:
     
     `export KUBECONFIG=$(terraform output kubeconfig)
     kubectl get nodes` 
-    
 
+    ````bash
+    kubectl --kubeconfig=kubeconfig.yaml get nodes
+    ````
+4.  **Instalar ArgoCD y crear el loadbalancer:**
+    ````bash
+    kubectl --kubeconfig=kubeconfig.yaml apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+    ````
+
+    ````bash
+    kubectl --kubeconfig=kubeconfig.yaml patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
+    ````
 ### Destruir el Clúster
 
 Para eliminar el clúster de Kubernetes y todos los recursos relacionados:
@@ -73,10 +79,3 @@ Siéntete libre de bifurcar este repositorio, hacer cambios y enviar solicitudes
 ### Licencia
 
 Este proyecto está licenciado bajo la Licencia MIT. Consulta el archivo LICENSE para más detalles.
-<<<<<<< HEAD
-=======
-# terraform-do-kubernetes
-infrestructura como codigo para crear un cluster de kubernetes nativo de Digital Ocean.
->>>>>>> parent of 34f8eb8 (despliegue de cluster exitoso)
-=======
->>>>>>> e20f4925640ccb664becdd2134623b88329e8e31

@@ -1,0 +1,6 @@
+````bash
+kubectl --kubeconfig=kubeconfig.yaml apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+````
+````bash
+kubectl --kubeconfig=kubeconfig.yaml patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
+````
