@@ -25,11 +25,6 @@ cd terraform-do-kubernetes``
     
 
 `do_token = "tu_token_de_api_de_digitalocean`
-
-2.  **Claves SSH:** Asegúrate de agregar la huella digital de tu clave SSH y la ruta a tu clave privada en el archivo `terraform.tfvars` o `variables.tf`.
-
-    `ssh_fingerprint = "tu_huella_digital_ssh"
-    ssh_pkey = "./ruta_a_tu_clave_privada"` 
     
 4.  **Configuración del Clúster de Kubernetes:** La configuración del clúster se encuentra en el archivo `provider.tf`. Puedes personalizar la versión de Kubernetes, la región y la configuración del grupo de nodos según tus necesidades.
     
