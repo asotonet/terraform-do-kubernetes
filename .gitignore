@@ -1,1 +1,8 @@
+<<<<<<< HEAD
+terraform.tf*
+.terraform*
+terraform.tfstate
+terraform.tfstate.backup
+=======
 terraform.tfvars
+>>>>>>> parent of 34f8eb8 (despliegue de cluster exitoso)
