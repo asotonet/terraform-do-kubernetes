@@ -9,13 +9,7 @@ metadata:
     app.kubernetes.io/part-of: argocd
   name: argocd-server
   namespace: argocd
-  resourceVersion: "7433"
-  uid: e15cbce6-0f8a-4a3f-9f3c-c2be73841c73
 spec:
-  allocateLoadBalancerNodePorts: true
-  clusterIP: 10.245.246.191
-  clusterIPs:
-  - 10.245.246.191
   externalTrafficPolicy: Cluster
   internalTrafficPolicy: Cluster
   ipFamilies:
@@ -36,5 +30,3 @@ spec:
     app.kubernetes.io/name: argocd-server
   sessionAffinity: None
   type: LoadBalancer
-status:
-  loadBalancer: {}
