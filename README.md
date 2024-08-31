@@ -1,6 +1,6 @@
 
 # Terraform DO Kubernetes       
-![Terraform]([https://url/a/tu/imagen.png](https://th.bing.com/th/id/R.e80434c96ffa16998976ed3dcb1c74ea?rik=TdhsrCaPrlcZ3A&riu=http%3a%2f%2fsamsung-cnct.github.io%2fimages%2flogo-terraform.e80434c9.png&ehk=T0I2kU7cNO6Wn68GwjmqXkx6mXza2%2fd3TEYHvHfojoY%3d&risl=&pid=ImgRaw&r=0))
+<img alt="Terraform" src="https://www.datocms-assets.com/2885/1629941242-logo-terraform-main.svg" width="600px">
 
 
 Este repositorio contiene configuraciones de Terraform para desplegar un clúster de Kubernetes en DigitalOcean. La configuración incluye la creación del clúster, los grupos de nodos, y proporciona una salida `kubeconfig` para gestionar el clúster.
