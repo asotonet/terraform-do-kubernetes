@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Service
+metadata:
+  finalizers:
+  - service.kubernetes.io/load-balancer-cleanup
+  labels:
+    app.kubernetes.io/component: server
+    app.kubernetes.io/name: argocd-server
+    app.kubernetes.io/part-of: argocd
+  name: argocd-server
+  namespace: argocd
+  resourceVersion: "7433"
+  uid: e15cbce6-0f8a-4a3f-9f3c-c2be73841c73
+spec:
+  allocateLoadBalancerNodePorts: true
+  clusterIP: 10.245.246.191
+  clusterIPs:
+  - 10.245.246.191
+  externalTrafficPolicy: Cluster
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: http
+    nodePort: 30843
+    port: 80
+    protocol: TCP
+    targetPort: 8080
+  - name: https
+    nodePort: 31680
+    port: 443
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app.kubernetes.io/name: argocd-server
+  sessionAffinity: None
+  type: LoadBalancer
+status:
+  loadBalancer: {}

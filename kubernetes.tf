@@ -50,7 +50,7 @@ EOT
 
 #Se trae los datso del SVC con el nombre "argocd"
 data "digitalocean_loadbalancer" "request_data_argocd_lb" {
-  name = "argocd"
+  name = "argocd-server"
   depends_on = [
     null_resource.get_token_password_kubectl
   ]
