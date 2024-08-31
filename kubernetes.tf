@@ -51,6 +51,9 @@ EOT
 #Se trae los datso del SVC con el nombre "argocd"
 data "digitalocean_loadbalancer" "request_data_argocd_lb" {
   name = "argocd"
+  depends_on = [
+    null_resource.get_token_password_kubectl
+  ]
 }
 
 #Se crea el registro DNS para el loadbalancer de Argocd a partir de la IP obtenida en el SVC de loadbalancer creado.
