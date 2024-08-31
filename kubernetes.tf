@@ -26,7 +26,7 @@ resource "null_resource" "apply_kubectl" {
 resource "null_resource" "patch_argocd_service_kubectl" {
     provisioner "local-exec" {
     command = <<EOT
-kubectl --kubeconfig=kubeconfig.yaml patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
+kubectl --kubeconfig=kubeconfig.yaml patch svc argocd-server -n argocd -p '{\"spec\": {\"type\": \"LoadBalancer\"}}'
 EOT
   }
 
@@ -40,7 +40,7 @@ EOT
 resource "null_resource" "get_token_password_kubectl" {
     provisioner "local-exec" {
     command = <<EOT
-kubectl --kubeconfig=kubeconfig.yaml -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+kubectl --kubeconfig=kubeconfig.yaml -n argocd get secret argocd-initial-admin-secret -o jsonpath=\"{.data.password}\" | base64 -d
 EOT
   }
   depends_on = [
