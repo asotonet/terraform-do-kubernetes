@@ -47,6 +47,17 @@ EOT
   ]
 }
 */
+data "kubernetes_service" "prueba_svc" {
+  metadata {
+    name      = "argocd-server"
+    namespace = "argocd"
+  }
+}
+# Output para mostrar la IP del LoadBalancer
+output "service_loadbalancer_ip" {
+  value = data.kubernetes_service.prueba_svc.status[0].load_balancer[0].ingress[0].ip
+}
+
 data "digitalocean_loadbalancer" "test" {
   name = "ae15cbce60f8a4a3f9f3cc2be73841c7"
 }
