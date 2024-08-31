@@ -48,7 +48,7 @@ EOT
 }
 */
 data "digitalocean_loadbalancer" "test" {
-  name = ""
+  name = "argocd-server"
 }
 
 output "argocd_server_lb_ip" {
