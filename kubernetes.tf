@@ -64,7 +64,7 @@ output "service_loadbalancer_ip" {
 resource "digitalocean_record" "argocd_dns" {
   domain = "asntech.lat"
   type   = "A"
-  name   = "argocd.asntech.lat"
+  name   = "argocd"
 
   value = data.kubernetes_service.prueba_svc.status[0].load_balancer[0].ingress[0].ip
 
