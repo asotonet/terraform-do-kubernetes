@@ -62,9 +62,9 @@ output "service_loadbalancer_ip" {
 
 #Se crea el registro DNS para el loadbalancer de Argocd a partir de la IP obtenida en el SVC de loadbalancer creado.
 resource "digitalocean_record" "argocd_dns" {
-  domain = "argocd.asntech.lat"
+  domain = "asntech.lat"
   type   = "A"
-  name   = "subdomain"
+  name   = "argocd.asntech.lat"
 
   value = data.kubernetes_service.prueba_svc.status[0].load_balancer[0].ingress[0].ip
 
