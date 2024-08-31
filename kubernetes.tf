@@ -47,6 +47,13 @@ EOT
   ]
 }
 */
+data "digitalocean_loadbalancer" "test" {
+  name = ""
+}
+
+output "argocd_server_lb_ip" {
+  value = kubernetes_service.argocd_server_lb.status[0].load_balancer[0].ingress[0].ip
+}
 
 #Se trae los datso del SVC con el nombre "argocd"
 data "digitalocean_loadbalancer" "request_data_argocd_lb" {
