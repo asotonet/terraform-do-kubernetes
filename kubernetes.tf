@@ -63,7 +63,7 @@ data "kubernetes_service" "prueba_svc" {
 }
 # Output para mostrar la IP del LoadBalancer
 output "service_loadbalancer_ip" {
-  value = data.kubernetes_service.prueba_svc.status[0].load_balancer[0].ingress[0].ip
+  value = data.kubernetes_service.prueba_svc.ip
   
   depends_on = [
     kubernetes_service.prueba_svc
@@ -76,7 +76,7 @@ resource "digitalocean_record" "argocd_dns" {
   type   = "A"
   name   = "argocd"
 
-  value = data.kubernetes_service.prueba_svc.status[0].load_balancer[0].ingress[0].ip
+  value = data.kubernetes_service.prueba_svc.ip
 
   depends_on = [
     kubernetes_service.prueba_svc
