@@ -34,22 +34,8 @@ resource "null_resource" "patch_argocd_service_kubectl" {
   ]
 }
 
-/*
-#Se obtiene el token admin password para indiicar sesión en Argocd
-resource "null_resource" "get_token_password_kubectl" {
-    provisioner "local-exec" {
-    command = <<EOT
-kubectl --kubeconfig=kubeconfig.yaml -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
-EOT
-  }
-  depends_on = [
-    null_resource.patch_argocd_service_kubectl
-  ]
-}
-*/
-
 #Se trae los datso del SVC con el nombre "argocd"
-data "kubernetes_service" "prueba_svc" {
+data "kubernetes_service" "argocd_svc" {
   metadata {
     name      = "argocd-server"
     namespace = "argocd"
@@ -60,7 +46,7 @@ data "kubernetes_service" "prueba_svc" {
 }
 # Output para mostrar la IP del LoadBalancer
 output "service_argocd_loadbalancer_ip" {
-  value = data.kubernetes_service.prueba_svc.status[0].load_balancer[0].ingress[0].ip
+  value = data.kubernetes_service.argocd_svc.status[0].load_balancer[0].ingress[0].ip
 }
 
 #Se crea el registro DNS para el loadbalancer de Argocd a partir de la IP obtenida en el SVC de loadbalancer creado.
@@ -69,7 +55,7 @@ resource "digitalocean_record" "argocd_dns" {
   type   = "A"
   name   = "argocd"
 
-  value = data.kubernetes_service.prueba_svc.status[0].load_balancer[0].ingress[0].ip
+  value = data.kubernetes_service.argocd_svc.status[0].load_balancer[0].ingress[0].ip
 
   depends_on = [
     null_resource.patch_argocd_service_kubectl
