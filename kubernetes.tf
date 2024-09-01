@@ -142,6 +142,6 @@ resource "digitalocean_record" "nginx_web_dns" {
   value = data.kubernetes_service.nginx_svc.status[0].load_balancer[0].ingress[0].ip
 
   depends_on = [
-    kubernetes_service.nginx_svc
+    data.kubernetes_service.nginx_svc
   ]
 }
