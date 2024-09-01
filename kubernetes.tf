@@ -185,3 +185,4 @@ output "service_nginx_loadbalancer_ip" {
 output "service_argocd_loadbalancer_ip" {
   value = "${null_resource.wait_for_argocd_lb_ip.triggers.ip}"
 }
+*/
