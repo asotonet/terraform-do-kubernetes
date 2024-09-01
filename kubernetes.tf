@@ -54,6 +54,9 @@ data "kubernetes_service" "prueba_svc" {
     name      = "argocd-server"
     namespace = "argocd"
   }
+  depends_on = [
+     null_resource.patch_argocd_service_kubectl
+  ]
 }
 # Output para mostrar la IP del LoadBalancer
 output "service_loadbalancer_ip" {
