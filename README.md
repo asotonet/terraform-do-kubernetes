@@ -13,7 +13,7 @@ Antes de comenzar, asegúrate de tener instalados los siguientes elementos:
 - [DigitalOcean CLI (doctl)](https://github.com/digitalocean/doctl) (opcional pero recomendado)
 - Una cuenta de DigitalOcean con un token de API
 
-# Diagrama de flujo
+## Diagrama de flujo
 
 ````mermaid
 graph TD
