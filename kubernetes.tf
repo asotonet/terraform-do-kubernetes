@@ -56,7 +56,7 @@ data "kubernetes_service" "prueba_svc" {
   }
 }
 # Output para mostrar la IP del LoadBalancer
-output "service_loadbalancer_ip" {
+output "service_argocd_loadbalancer_ip" {
   value = data.kubernetes_service.prueba_svc.status[0].load_balancer[0].ingress[0].ip
 }
 
@@ -85,14 +85,63 @@ resource "null_resource" "git_clone_nginx" {
   ]
 }
 
-# Se crea el deployment de nginx
-resource "null_resource" "nginx_deployment" {
+# Se crea el namespace de NGINX
+resource "null_resource" "nginx_namespace" {
     provisioner "local-exec" {
-    command = "kubectl --kubeconfig=kubeconfig.yaml  apply -f ./nginx-/argocd-server-svc.yaml"
+    command = "kubectl --kubeconfig=kubeconfig.yaml  apply -f ./kubernetes-nginx-demo/nginx-web-ns.yaml"
   }
 
   # Espera a que se halla ejecutado
   depends_on = [
     null_resource.git_clone_nginx
+  ]
+}
+
+# Se crea el deployment de nginx
+resource "null_resource" "nginx_deployment" {
+    provisioner "local-exec" {
+    command = "kubectl --kubeconfig=kubeconfig.yaml  apply -f ./kubernetes-nginx-demo/nginx-web-app.yaml"
+  }
+
+  # Espera a que se halla ejecutado
+  depends_on = [
+    null_resource.nginx_namespace
+  ]
+}
+
+# Se crea el deployment de nginx
+resource "null_resource" "nginx_service" {
+    provisioner "local-exec" {
+    command = "kubectl --kubeconfig=kubeconfig.yaml  apply -f ./kubernetes-nginx-demo/nginx-web-svc.yaml"
+  }
+
+  # Espera a que se halla ejecutado
+  depends_on = [
+    null_resource.nginx_deployment
+  ]
+}
+
+#Se trae los datso del SVC con el nombre "nginx"
+data "kubernetes_service" "nginx_svc" {
+  metadata {
+    name      = "nginx-web-service"
+    namespace = "nginx-web-namespace"
+  }
+}
+# Output para mostrar la IP del LoadBalancer
+output "service_nginx_loadbalancer_ip" {
+  value = data.kubernetes_service.nginx_svc.status[0].load_balancer[0].ingress[0].ip
+}
+
+#Se crea el registro DNS para el loadbalancer de Nginx a partir de la IP obtenida en el SVC de loadbalancer creado.
+resource "digitalocean_record" "argocd_dns" {
+  domain = "asntech.lat"
+  type   = "A"
+  name   = "web"
+
+  value = data.kubernetes_service.nginx_svc.status[0].load_balancer[0].ingress[0].ip
+
+  depends_on = [
+    kubernetes_service.nginx_svc
   ]
 }
