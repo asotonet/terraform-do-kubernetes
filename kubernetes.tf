@@ -115,10 +115,10 @@ resource "null_resource" "wait_for_nginx_lb" {
   provisioner "local-exec" {
     command = <<-EOT
       powershell -Command "& {
-        \$ip = ''
-        while (\$ip -eq '') {
+        $ip = ''
+        while ($ip -eq '') {
           Write-Output 'Esperando a que se asigne la IP del LoadBalancer...'
-          \$ip = kubectl --kubeconfig=kubeconfig.yaml -n nginx-web-namespace get svc nginx-web-service -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
+          $ip = kubectl --kubeconfig=kubeconfig.yaml -n nginx-web-namespace get svc nginx-web-service -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
           Start-Sleep -Seconds 10
         }
       }"
