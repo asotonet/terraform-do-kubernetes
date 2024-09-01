@@ -72,20 +72,27 @@ resource "digitalocean_record" "argocd_dns" {
     null_resource.patch_argocd_service_kubectl
   ]
 }
-#resource "kubernetes_manifest" "patch_argocd_service" {
-#  manifest = {
-#    "apiVersion" = "v1"
-#    "kind"       = "Service"
-##    "metadata" = {
- #     "name"      = "argocd-server"
- #     "namespace" = "${kubernetes_namespace.argocd.metadata[0].name}"
- #   }
-#    "spec" = {
-#      "type" = "LoadBalancer"
-#    }
-#  }
-#  depends_on = [
-##    kubernetes_namespace.argocd
- # ]
-#}
 
+#Clona el repositorio de la APP demo
+resource "null_resource" "git_clone_nginx" {
+    provisioner "local-exec" {
+    command = "git clone https://github.com/asotonet/kubernetes-nginx-demo"
+  }
+
+  # Espera a que se halla ejecutado
+  depends_on = [
+    kubernetes_namespace.argocd
+  ]
+}
+
+# Se crea el deployment de nginx
+resource "null_resource" "nginx_deployment" {
+    provisioner "local-exec" {
+    command = "kubectl --kubeconfig=kubeconfig.yaml  apply -f ./nginx-/argocd-server-svc.yaml"
+  }
+
+  # Espera a que se halla ejecutado
+  depends_on = [
+    null_resource.git_clone_nginx
+  ]
+}
