@@ -34,12 +34,14 @@ resource "null_resource" "patch_argocd_service_kubectl" {
   ]
 }
 
+# Variable para almacenar la IP del servicio LoadBalancer de ArgoCD
 variable "argocd_ip" {
   description = "IP address of the ArgoCD LoadBalancer service"
   type        = string
   default     = ""
 }
 
+# Espera hasta que la IP del LoadBalancer de ArgoCD esté disponible
 resource "null_resource" "wait_for_argocd_lb_ip" {
   depends_on = [null_resource.patch_argocd_service_kubectl]
 
@@ -51,7 +53,8 @@ resource "null_resource" "wait_for_argocd_lb_ip" {
     command = "echo ${self.triggers.ip} > /tmp/argocd_lb_ip"
   }
 }
-#Se trae los datso del SVC con el nombre "argocd"
+
+# Se obtiene la información del servicio ArgoCD
 data "kubernetes_service" "argocd_svc" {
   metadata {
     name      = "argocd-server"
@@ -59,9 +62,10 @@ data "kubernetes_service" "argocd_svc" {
   }
   depends_on = [
     null_resource.patch_argocd_service_kubectl
-  ]  
+  ]
+}
 
-#Se crea el registro DNS para el loadbalancer de Argocd a partir de la IP obtenida en el SVC de loadbalancer creado.
+# Se crea el registro DNS para el LoadBalancer de ArgoCD usando la IP obtenida
 resource "digitalocean_record" "argocd_dns" {
   domain = "asntech.lat"
   type   = "A"
@@ -122,12 +126,14 @@ resource "null_resource" "nginx_service" {
   ]
 }
 
+# Variable para almacenar la IP del servicio LoadBalancer de NGINX
 variable "nginx_ip" {
   description = "IP address of the Nginx LoadBalancer service"
   type        = string
   default     = ""
 }
 
+# Espera hasta que la IP del LoadBalancer de NGINX esté disponible
 resource "null_resource" "wait_for_nginx_lb_ip" {
   depends_on = [null_resource.nginx_service]
 
@@ -140,7 +146,7 @@ resource "null_resource" "wait_for_nginx_lb_ip" {
   }
 }
 
-#Se trae los datso del SVC con el nombre "nginx"
+# Se obtiene la información del servicio NGINX
 data "kubernetes_service" "nginx_svc" {
   metadata {
     name      = "nginx-web-service"
@@ -148,11 +154,10 @@ data "kubernetes_service" "nginx_svc" {
   }
   depends_on = [
     null_resource.nginx_service
-  ]  
+  ]
 }
 
-
-#Se crea el registro DNS para el loadbalancer de Nginx a partir de la IP obtenida en el SVC de loadbalancer creado.
+# Se crea el registro DNS para el LoadBalancer de NGINX usando la IP obtenida
 resource "digitalocean_record" "nginx_web_dns" {
   domain = "asntech.lat"
   type   = "A"
@@ -164,6 +169,7 @@ resource "digitalocean_record" "nginx_web_dns" {
     data.kubernetes_service.nginx_svc
   ]
 }
+
 
 # Output para mostrar la IP del LoadBalancer
 output "service_nginx_loadbalancer_ip" {
