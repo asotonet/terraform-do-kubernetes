@@ -110,6 +110,24 @@ resource "null_resource" "nginx_service" {
   ]
 }
 
+# Se crea el recurso de espera
+resource "null_resource" "wait_for_nginx_lb" {
+  provisioner "local-exec" {
+    command = <<EOT
+    # Espera a que el LoadBalancer tenga una IP asignada
+    while [ -z "$(kubectl --kubeconfig=kubeconfig.yaml -n nginx-web-namespace get svc nginx-web-service -o jsonpath='{.status.loadBalancer.ingress[0].ip}')" ]; do
+      echo "Esperando a que se asigne la IP del LoadBalancer..."
+      sleep 10
+    done
+    EOT
+  }
+
+  # Este recurso depende de que el servicio nginx haya sido creado
+  depends_on = [
+    null_resource.nginx_service
+  ]
+}
+
 #Se trae los datso del SVC con el nombre "nginx"
 data "kubernetes_service" "nginx_svc" {
   metadata {
