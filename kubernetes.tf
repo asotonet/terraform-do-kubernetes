@@ -41,6 +41,7 @@ variable "argocd_ip" {
   default     = ""
 }
 
+
 # Espera hasta que la IP del LoadBalancer de ArgoCD esté disponible
 resource "null_resource" "wait_for_argocd_lb_ip" {
   depends_on = [null_resource.patch_argocd_service_kubectl]
@@ -48,11 +49,13 @@ resource "null_resource" "wait_for_argocd_lb_ip" {
   triggers = {
     ip = data.kubernetes_service.argocd_svc.status[0].load_balancer[0].ingress[0].ip
   }
-
+/*
   provisioner "local-exec" {
     command = "echo ${self.triggers.ip} > /tmp/argocd_lb_ip"
   }
+  */
 }
+
 
 # Se obtiene la información del servicio ArgoCD
 data "kubernetes_service" "argocd_svc" {
@@ -141,9 +144,11 @@ resource "null_resource" "wait_for_nginx_lb_ip" {
     ip = data.kubernetes_service.nginx_svc.status[0].load_balancer[0].ingress[0].ip
   }
 
+/*
   provisioner "local-exec" {
     command = "echo ${self.triggers.ip} > /tmp/nginx_lb_ip"
   }
+  */
 }
 
 # Se obtiene la información del servicio NGINX
