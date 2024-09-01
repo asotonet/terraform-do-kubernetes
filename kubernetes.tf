@@ -34,6 +34,23 @@ resource "null_resource" "patch_argocd_service_kubectl" {
   ]
 }
 
+variable "argocd_ip" {
+  description = "IP address of the ArgoCD LoadBalancer service"
+  type        = string
+  default     = ""
+}
+
+resource "null_resource" "wait_for_argocd_lb_ip" {
+  depends_on = [null_resource.patch_argocd_service_kubectl]
+
+  triggers = {
+    ip = data.kubernetes_service.argocd_svc.status[0].load_balancer[0].ingress[0].ip
+  }
+
+  provisioner "local-exec" {
+    command = "echo ${self.triggers.ip} > /tmp/argocd_lb_ip"
+  }
+}
 #Se trae los datso del SVC con el nombre "argocd"
 data "kubernetes_service" "argocd_svc" {
   metadata {
@@ -43,11 +60,6 @@ data "kubernetes_service" "argocd_svc" {
   depends_on = [
     null_resource.patch_argocd_service_kubectl
   ]  
-}
-# Output para mostrar la IP del LoadBalancer
-output "service_argocd_loadbalancer_ip" {
-  value = data.kubernetes_service.argocd_svc.status[0].load_balancer[0].ingress[0].ip
-}
 
 #Se crea el registro DNS para el loadbalancer de Argocd a partir de la IP obtenida en el SVC de loadbalancer creado.
 resource "digitalocean_record" "argocd_dns" {
@@ -55,10 +67,10 @@ resource "digitalocean_record" "argocd_dns" {
   type   = "A"
   name   = "argocd"
 
-  value = data.kubernetes_service.argocd_svc.status[0].load_balancer[0].ingress[0].ip
+  value = "${null_resource.wait_for_argocd_lb_ip.triggers.ip}"
 
   depends_on = [
-    null_resource.patch_argocd_service_kubectl
+    null_resource.wait_for_argocd_lb_ip
   ]
 }
 
@@ -110,6 +122,24 @@ resource "null_resource" "nginx_service" {
   ]
 }
 
+variable "nginx_ip" {
+  description = "IP address of the Nginx LoadBalancer service"
+  type        = string
+  default     = ""
+}
+
+resource "null_resource" "wait_for_nginx_lb_ip" {
+  depends_on = [null_resource.nginx_service]
+
+  triggers = {
+    ip = data.kubernetes_service.nginx_svc.status[0].load_balancer[0].ingress[0].ip
+  }
+
+  provisioner "local-exec" {
+    command = "echo ${self.triggers.ip} > /tmp/nginx_lb_ip"
+  }
+}
+
 #Se trae los datso del SVC con el nombre "nginx"
 data "kubernetes_service" "nginx_svc" {
   metadata {
@@ -120,10 +150,7 @@ data "kubernetes_service" "nginx_svc" {
     null_resource.nginx_service
   ]  
 }
-# Output para mostrar la IP del LoadBalancer
-output "service_nginx_loadbalancer_ip" {
-  value = data.kubernetes_service.nginx_svc.status[0].load_balancer[0].ingress[0].ip
-}
+
 
 #Se crea el registro DNS para el loadbalancer de Nginx a partir de la IP obtenida en el SVC de loadbalancer creado.
 resource "digitalocean_record" "nginx_web_dns" {
@@ -131,9 +158,20 @@ resource "digitalocean_record" "nginx_web_dns" {
   type   = "A"
   name   = "web"
 
-  value = data.kubernetes_service.nginx_svc.status[0].load_balancer[0].ingress[0].ip
+  value = "${null_resource.wait_for_nginx_lb_ip.triggers.ip}"
 
   depends_on = [
     data.kubernetes_service.nginx_svc
   ]
+}
+
+# Output para mostrar la IP del LoadBalancer
+output "service_nginx_loadbalancer_ip" {
+  value = data.kubernetes_service.nginx_svc.status[0].load_balancer[0].ingress[0].ip
+}
+
+}
+# Output para mostrar la IP del LoadBalancer
+output "service_argocd_loadbalancer_ip" {
+  value = data.kubernetes_service.argocd_svc.status[0].load_balancer[0].ingress[0].ip
 }
