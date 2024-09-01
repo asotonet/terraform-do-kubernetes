@@ -134,7 +134,7 @@ output "service_nginx_loadbalancer_ip" {
 }
 
 #Se crea el registro DNS para el loadbalancer de Nginx a partir de la IP obtenida en el SVC de loadbalancer creado.
-resource "digitalocean_record" "argocd_dns" {
+resource "digitalocean_record" "nginx_web_dns" {
   domain = "asntech.lat"
   type   = "A"
   name   = "web"
