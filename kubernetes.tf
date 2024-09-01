@@ -18,7 +18,6 @@ resource "null_resource" "apply_kubectl" {
     provisioner "local-exec" {
     command = "kubectl --kubeconfig=kubeconfig.yaml apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml "
   }
-<<<<<<< HEAD
 
   # Espera a que se cree el namespace
   depends_on = [
@@ -76,8 +75,6 @@ resource "digitalocean_record" "argocd_dns" {
 
   value = data.kubernetes_service.prueba_svc.status[0].load_balancer[0].ingress[0].ip
 }
-=======
->>>>>>> testing
 
   # Espera a que se cree el namespace
   depends_on = [
