@@ -170,13 +170,11 @@ resource "digitalocean_record" "nginx_web_dns" {
   ]
 }
 
-
 # Output para mostrar la IP del LoadBalancer
 output "service_nginx_loadbalancer_ip" {
   value = data.kubernetes_service.nginx_svc.status[0].load_balancer[0].ingress[0].ip
 }
 
-}
 # Output para mostrar la IP del LoadBalancer
 output "service_argocd_loadbalancer_ip" {
   value = data.kubernetes_service.argocd_svc.status[0].load_balancer[0].ingress[0].ip
