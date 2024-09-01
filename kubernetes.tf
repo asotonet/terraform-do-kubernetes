@@ -33,7 +33,7 @@ resource "null_resource" "patch_argocd_service_kubectl" {
     null_resource.apply_kubectl
   ]
 }
-
+/*
 # Variable para almacenar la IP del servicio LoadBalancer de ArgoCD
 variable "argocd_ip" {
   description = "IP address of the ArgoCD LoadBalancer service"
@@ -49,11 +49,11 @@ resource "null_resource" "wait_for_argocd_lb_ip" {
   triggers = {
     ip = data.kubernetes_service.argocd_svc.status[0].load_balancer[0].ingress[0].ip
   }
-/*
-  provisioner "local-exec" {
-    command = "echo ${self.triggers.ip} > /tmp/argocd_lb_ip"
-  }
-  */
+
+#  provisioner "local-exec" {
+#    command = "echo ${self.triggers.ip} > /tmp/argocd_lb_ip"
+#  }
+  
 }
 
 
@@ -80,6 +80,7 @@ resource "digitalocean_record" "argocd_dns" {
     null_resource.wait_for_argocd_lb_ip
   ]
 }
+*/
 
 #Clona el repositorio de la APP demo
 resource "null_resource" "git_clone_nginx" {
@@ -128,7 +129,7 @@ resource "null_resource" "nginx_service" {
     null_resource.nginx_deployment
   ]
 }
-
+/*
 # Variable para almacenar la IP del servicio LoadBalancer de NGINX
 variable "nginx_ip" {
   description = "IP address of the Nginx LoadBalancer service"
@@ -144,11 +145,11 @@ resource "null_resource" "wait_for_nginx_lb_ip" {
     ip = data.kubernetes_service.nginx_svc.status[0].load_balancer[0].ingress[0].ip
   }
 
-/*
-  provisioner "local-exec" {
-    command = "echo ${self.triggers.ip} > /tmp/nginx_lb_ip"
-  }
-  */
+
+#  provisioner "local-exec" {
+#    command = "echo ${self.triggers.ip} > /tmp/nginx_lb_ip"
+#  }
+  
 }
 
 # Se obtiene la información del servicio NGINX
