@@ -8,3 +8,8 @@ kubectl --kubeconfig=kubeconfig.yaml patch svc argocd-server -n argocd -p '{"spe
 ````bash
 kubectl --kubeconfig=kubeconfig.yaml -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
 ````
+
+
+terraform apply -destroy -auto-approve
+
+terraform apply -auto-approve
