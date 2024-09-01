@@ -51,7 +51,7 @@ EOT
 }
 */
 
-#Se trae los datso del SVC con el nombre "argocd"
+# Data source para obtener el Service de Kubernetes
 data "kubernetes_service" "prueba_svc" {
   metadata {
     name      = "argocd-server"
@@ -61,27 +61,21 @@ data "kubernetes_service" "prueba_svc" {
      null_resource.patch_argocd_service_kubectl
   ]
 }
+
 # Output para mostrar la IP del LoadBalancer
 output "service_loadbalancer_ip" {
-  value = data.kubernetes_service.prueba_svc.ip
-  
-  depends_on = [
-    kubernetes_service.prueba_svc
-  ]
+  value = data.kubernetes_service.prueba_svc.status[0].load_balancer[0].ingress[0].ip
 }
 
-#Se crea el registro DNS para el loadbalancer de Argocd a partir de la IP obtenida en el SVC de loadbalancer creado.
+# Se crea el registro DNS para el loadbalancer de ArgoCD a partir de la IP obtenida en el SVC de loadbalancer creado.
 resource "digitalocean_record" "argocd_dns" {
   domain = "asntech.lat"
   type   = "A"
   name   = "argocd"
 
-  value = data.kubernetes_service.prueba_svc.ip
-
-  depends_on = [
-    kubernetes_service.prueba_svc
-  ]
+  value = data.kubernetes_service.prueba_svc.status[0].load_balancer[0].ingress[0].ip
 }
+
 #resource "kubernetes_manifest" "patch_argocd_service" {
 #  manifest = {
 #    "apiVersion" = "v1"
