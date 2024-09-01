@@ -13,3 +13,7 @@ kubectl --kubeconfig=kubeconfig.yaml -n argocd get secret argocd-initial-admin-s
 terraform apply -destroy -auto-approve
 
 terraform apply -auto-approve
+
+terraform apply --target=vars.tf --target=provider.tf --target=main.tf --target=kubernetes.tf
+
+terraform apply --target=dnsrecords.tf 
