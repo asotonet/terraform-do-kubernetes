@@ -3,3 +3,6 @@ terraform.tf*
 terraform.tfstate
 terraform.tfstate.backup
 kubeconfig.yaml
+./kubernetes-nginx-demo*
+kubernetes-nginx-demo/*
+./tmp/*
