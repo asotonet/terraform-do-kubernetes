@@ -96,7 +96,7 @@ Para eliminar el clúster de Kubernetes y todos los recursos relacionados:
 ### Solución de Problemas
 
 -   Si encuentras problemas con la versión de Kubernetes o la API, verifica que la versión especificada en `provider.tf` esté disponible usando `doctl`.
--   Asegúrate de que tus claves SSH estén configuradas correctamente para la provisión remota.
+-   Asegúrate de que tu Digital Ocean Token Key esté configurado correctamente para la conexión remota.
 
 ### Contribuciones
 
