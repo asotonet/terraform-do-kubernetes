@@ -13,6 +13,7 @@ resource "null_resource" "wait_for_argocd_lb_ip" {
   triggers = {
     ip = data.kubernetes_service.argocd_svc.status[0].load_balancer[0].ingress[0].ip
   }
+}
 
 # Se obtiene la información del servicio ArgoCD
 data "kubernetes_service" "argocd_svc" {
