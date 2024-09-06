@@ -1,6 +1,20 @@
 # Se apunta al archivo kubeconfig.yaml
 provider "kubernetes" {
-    config_path = "${local_file.kubernetes_config.filename}"  
+  config_path = local_file.kubernetes_config.filename
+}
+
+
+resource "time_sleep" "wait_for_kubeconfig" {
+  create_duration = "15s"
+  depends_on = [ local_file.kubernetes_config
+   ]
+}
+
+resource "null_resource" "view_kubeconfig" {
+    provisioner "local-exec" {
+    command = "cat kubeconfig.yaml"
+  }
+  depends_on = [ time_sleep.wait_for_kubeconfig ]
 }
 
 #Se crea el namespace para argocd
@@ -8,6 +22,9 @@ resource "kubernetes_namespace" "argocd" {
     metadata {
     name = "argocd"
     }
+  depends_on = [ 
+    null_resource.view_kubeconfig
+  ]
 }
 
 #Se instala argocd
@@ -32,6 +49,11 @@ resource "null_resource" "patch_argocd_service_kubectl" {
   depends_on = [
     null_resource.apply_kubectl
   ]
+}
+
+resource "time_sleep" "time_sleep_for_argolb" {
+  create_duration = "300s"
+  depends_on = [ null_resource.patch_argocd_service_kubectl ]
 }
 /*
 # Variable para almacenar la IP del servicio LoadBalancer de ArgoCD
@@ -80,8 +102,9 @@ resource "digitalocean_record" "argocd_dns" {
     null_resource.wait_for_argocd_lb_ip
   ]
 }
-*/
 
+
+/*
 #Clona el repositorio de la APP demo
 resource "null_resource" "git_clone_nginx" {
     provisioner "local-exec" {
@@ -181,8 +204,12 @@ output "service_nginx_loadbalancer_ip" {
   value = "${null_resource.wait_for_nginx_lb_ip.triggers.ip}"
 }
 
+
 # Output para mostrar la IP del LoadBalancer
 output "service_argocd_loadbalancer_ip" {
   value = "${null_resource.wait_for_argocd_lb_ip.triggers.ip}"
+  depends_on = [
+    null_resource.wait_for_argocd_lb_ip
+  ]
 }
 */

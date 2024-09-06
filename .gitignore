@@ -6,3 +6,5 @@ kubeconfig.yaml
 ./kubernetes-nginx-demo*
 kubernetes-nginx-demo/*
 kubernetes-nginx-demo
+keys/*
+./keys
